@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #1E2420;
+    --bg: #FFFFFF;
     --panel: #262E28;
     --panel-edge: #333D35;
     --display-bg: #EFEAE0;
@@ -196,7 +196,7 @@
   let current = '0';
   let previous = null;
   let operator = null;
-  let justEvaluated = false;
+  let resetCurrent = false;
 
   const MAX_DIGITS = 12;
 
@@ -227,9 +227,9 @@
   }
 
   function inputDigit(d) {
-    if (justEvaluated) {
+    if (resetCurrent) {
       current = d;
-      justEvaluated = false;
+      resetCurrent = false;
       return render();
     }
     if (current === '0') {
@@ -241,9 +241,9 @@
   }
 
   function inputDecimal() {
-    if (justEvaluated) {
+    if (resetCurrent) {
       current = '0.';
-      justEvaluated = false;
+      resetCurrent = false;
       return render();
     }
     if (!current.includes('.')) current += '.';
@@ -265,7 +265,7 @@
     current = '0';
     previous = null;
     operator = null;
-    justEvaluated = false;
+    resetCurrent = false;
     render();
   }
 
@@ -281,7 +281,7 @@
   }
 
   function chooseOperator(op) {
-    if (operator && !justEvaluated && previous !== null) {
+    if (operator && !resetCurrent && previous !== null) {
       const result = compute(previous, current, operator);
       previous = isFinite(result) ? String(result) : 'Error';
       current = previous;
@@ -289,7 +289,7 @@
       previous = current;
     }
     operator = op;
-    justEvaluated = false;
+    resetCurrent = true;
     render();
   }
 
@@ -299,7 +299,7 @@
     current = isFinite(result) ? String(result) : 'Error';
     previous = null;
     operator = null;
-    justEvaluated = true;
+    resetCurrent = true;
     render();
   }
 
